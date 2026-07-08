@@ -8,7 +8,6 @@ Quando o sistema está em cruzeiro, o piloto automático é perfeito. Mas quando
 
 Foi por causa dessa percepção que eu decidi iniciar a minha série que ainda não dei um nome "fancy". Um movimento pessoal de voltar aos fundamentos, e decidi compartilhar cada passo desse caminho com vocês por aqui.
 
----
 
 ## 1. Fugindo da Síndrome do "Copiador de Código Premium"
 
@@ -18,7 +17,6 @@ Se eu pedir para a IA configurar uma VPC, ela vai me dar um bloco CIDR. Se eu n�
 
 Se eu colar o erro de volta na IA, ela vai sugerir cinco soluções genéricas: reiniciar o cluster, mudar permissões, mexer em Security Groups... E eu vou passar 12 horas rodando em círculos. Ela não tem o contexto macro para enxergar o erro básico de design de rede que eu cometi meses atrás. Eu não quero ser refém desse ciclo.
 
----
 
 ## 2. Sintaxe vs Semântica (Por que eu estou voltando aos "Bits")
 
@@ -34,7 +32,6 @@ Mas o *troubleshooting* em ambientes críticos exige conhecimento semântico. Re
 
 Saber a resposta que a máquina me dá é inútil se eu não consigo diagnosticar a pergunta certa.
 
----
 
 ## 3. O meu plano nessa série que ainda não dei um nome "fancy"
 
