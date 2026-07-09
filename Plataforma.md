@@ -23,13 +23,13 @@ Neste artigo, vou te mostrar os bastidores dessa arquitetura, os principais desa
 
 ## O Cenário no ECS e o Peso da Governança
 
-O ECS Fargate é uma ótima tecnologia para iniciar algo, pois ele facilita muito a rampagem, mas conforme os times de produto crescem, a falta de padronização e os desafiadores padrões corporativas tem o seu preço. No nosso cenário original, os desenvolvedores tinham autonomia para criar suas Tasks definitions ao seu flavor. O resultado prático disso era um grande desafio de conformidade.
+O ECS Fargate é uma ótima tecnologia para iniciar algo, pois ele facilita muito a rampagem, mas conforme os times de produto crescem, a falta de padronização e os desafiadores padrões corporativos tem o seu preço. No nosso cenário original, os desenvolvedores tinham autonomia para criar suas Tasks definitions ao seu flavor. O resultado prático disso era um grande desafio de conformidade.
 
 E para ser completamente honesto: nós tínhamos um processo interno que eu odiava com todas as minhas forças, chamávamos de  "Marathon".
 
-O Marathon era uma reunião recorrente e extremamente desgastante. O objetivo era juntar o time de infraestrutura e os responsáveis pelo desenvolvimento de produtos para ficar resolvedo coisas que estavam fora dos padrões, por exemplo:  caçando recursos órfãos na AWS e implorando para que os times colocassem tags básicas nos recursos, coisas simples, como a tag da squad dona do serviço. Ou em outros casos, apontar que os recursos estavam desperdiçando 95% da infraestrutura provisionada que ele deveria ter um trabalhao rightsizing. Era um trabalho de herói, totalmente manual, reativo e ineficiente. Mas talvez o nosso grande problema era mesmo a falta de tags.
+O Marathon era uma reunião recorrente e extremamente desgastante. O objetivo era juntar o time de dev e ops para ficar resolvedo coisas que estavam fora dos padrões, por exemplo: caçando recursos órfãos na AWS e implorando para que os times colocassem tags básicas nos recursos, coisas simples, como a tag da squad dona do serviço. Ou em outros casos, apontar que os recursos estavam desperdiçando 95% da infraestrutura provisionada que ele deveria ter um trabalhao rightsizing. Era um trabalho de herói, totalmente manual, reativo e ineficiente. Mas talvez o nosso grande problema era mesmo a falta de tags.
 
->O grande impacto disso era a cegueira total de custos. A falta dessas tags fazia com que não tivéssemos a menor visibilidade de para onde o dinheiro estava indo. Custos altíssimos de AWS chegavam e nós simplesmente não sabíamos e como muitas coisas não tinham tag, não conseguíamos ter uma visão mais granularizada dos custos, quanto cada time estava gastando na AWS, o que eles faziam e, o pior de tudo, se aquele custo sequer se justificava para o negócio. Era impossível auditar e otimizar o que não conseguíamos enxergar.
+>O grande impacto disso era a falta total de visibilidade de custos e isso impactava diretamente de onde o dinheiro estava sendo investido. Custos altíssimos na AWS chegavam e nós simplesmente não sabíamos e como muitas coisas não tinham tag, não conseguíamos ter uma visão mais granularizada, quanto cada time estava gastando na plataforma, o que eles faziam e, o pior de tudo, se aquele custo sequer se justificava para o negócio. Era impossível auditar e otimizar o que não conseguíamos enxergar.
 
 Além dessa dor de cabeça com FinOps, o modelo descentralizado do ECS gerava um fardo imenso para os times de produto:
 
@@ -40,7 +40,7 @@ Além dessa dor de cabeça com FinOps, o modelo descentralizado do ECS gerava um
 
 Sabíamos que o Amazon EKS resolveria o problema do custo e da velocidade. Mas como fazer isso sem obrigar 300 desenvolvedores a aprenderem o manifesto complexo do Kubernetes (Deployments, Services, Ingress, HPA)? E pior: como garantir que a gente matasse o Marathon e a dependência de intervenções manuais app por app de uma vez por todas?
 
-Mas a complexidade que o YAML padrão para atender os charts do banco seria um desafio com uma curva de apresenzado enorme, e talvez comprometesse toda nossa estratégia, pois traria uma complexidade enorma, e nós sabíamos:
+Mas a complexidade que o YAML padrão para atender os charts da organizacao seria um desafio com uma curva de aprendizado enorme, e talvez comprometesse toda nossa estratégia, pois traria uma certa complexidade que os times de desenvolvimento nao estavam preparados, e nós sabíamos deste desafio:
 
 A única forma de conseguirmos fazer o EKS ser aceito pela nossas lideranças seria se ele fosse mais fácil, pois as outras vantagens apesar de ter muito valor, não justificava a uma complexidade tão grande.
 Percebemos que a única saída era interceptar o deploy dentro do próprio cluster. Precisávamos de um operador que recebesse um YAML ultra simples do desenvolvedor e injetasse toda a complexidade e governança corporativa por baixo dos panos, de forma 100% automatizada.
@@ -69,9 +69,13 @@ Nossa arquitetura foi desenhada para ser simples:
 
 ## O real ganho com Secrets e Parameters
 
+Tivemos um ganho enorme ao usarmos o external-secrets que foi o escalonamento das aplicaçoes muito mais rapido e de quebra resolvemos um problema de rate limit nos parameters da AWS.
+
 ---
 
 ## Governança Centralizada na Prática: O Caso do Datadog e da Sanitização de Logs
+
+O operador nos trouxe uma governança centralizada que nos permite fazer ate mesmo uma virada na plataforma de observabilidade, onde no cenario antigo os times de desenvolvimento precisavam alterar individualmente app por app para onde iriam mandar seus logs, com o operador fazemos isso em um piscar de olhos alterando apenas em um lugar e replicando isso para todas as apps. Isso tambem nos permitiu que criassemos até mesmo uma peça para sanitizaçao de logs (este é um papo para outro artigo) e injetamos em todos os serviços.
 
 ---
 
@@ -94,4 +98,4 @@ Hoje, colhemos uma **redução de 75% nos custos de infraestrutura em produção
 
 O projeto, porém, está longe de estar "concluído". Mesmo sem atingirmos 100% de migração total de toda a carga de trabalho histórica, a eficiência que já geramos nos abriu os olhos para novas frentes. Atualmente, estamos estudando e desenhando otimizações de arquitetura com a meta ousada de trazer uma redução ainda maior nesse custo mensal de infra. 
 
-Em uma grande instituição financeira como a nossa, provamos que times enxutos usando tecnologia de forma pragmática conseguem sim mudar o rumo da governança, da experiência do desenvolvedor e do faturamento de nuvem. E o trabalho continua.
+Em uma grande organizaçao como a nossa, provamos que times enxutos usando tecnologia de forma pragmática conseguem sim mudar o rumo da governança, da experiência do desenvolvedor e do faturamento de nuvem. E o trabalho continua.
