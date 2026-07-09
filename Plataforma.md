@@ -1,4 +1,4 @@
-# Do ECS Fargate ao EKS: Como um time enxuto economizou milhares de reais enfrentando contornando desafios de governana e talz
+# Do ECS Fargate ao EKS: Como um time enxuto economizou milhares de reais enfrentando e contornando desafios de governaça e talz
 
 Migrar cargas de trabalho para o Kubernetes com a promessa de reduzir custos e ganhar escala é o sonho de qualquer liderança de tecnologia. Mas quem está na operação disso sabe a real: sem uma boa estratégia de plataforma, o Kubernetes joga uma complexidade brutal no colo dos desenvolvedores, gerando fricção, problemas de segurança e desperdício de nuvem.
 
