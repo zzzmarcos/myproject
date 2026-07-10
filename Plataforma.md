@@ -67,7 +67,7 @@ Nossa arquitetura foi desenhada para ser simples:
 
 ---
 
-## O real ganho com Secrets e Parameters: Diga adeus aos Rate Limits da AWS
+## Destravando a Escala: Como a gestão de Secrets e Parameters acelerou o scale das aplicações
 
 Uma das maiores dores que tínhamos no ECS Fargate estava diretamente ligada à forma como as aplicações lidavam com segredos e parâmetros de configuração (provenientes do AWS SSM Parameter Store e AWS Secrets Manager).
 
@@ -93,7 +93,7 @@ Agora, o fluxo funciona de forma assíncrona e inteligente:
 
 Essa mudança se provou ainda mais crucial no Kubernetes do que no ECS: os Pods no EKS são infinitamente mais voláteis. Eles nascem, morrem, são realocados entre nós e escalados para cima e para baixo constantemente. Se tivéssemos mantido o modelo antigo de buscar os dados diretamente na AWS em cada inicialização, a volatilidade do Kubernetes teria gerado uma tempestade perfeita de requisições, estourando o rate limit do Parameter Store em minutos. 
 
-Com o cache local provido pelo ESO, se precisarmos escalar de 10 para 100 réplicas em segundos, o Kubernetes apenas replica os Pods lendo as definições locais no `etcd`, sem fazer uma única chamada sequer à API da AWS no momento do boot. Eliminamos o gargalo de inicialização, zeramos os problemas de rate limit e garantimos estabilidade total para a nossa conta de nuvem mesmo nos maiores picos de estresse.
+Com o cache local provido pelo ESO, se precisarmos escalar de 10 para 100 réplicas em segundos, o Kubernetes apenas replica os Pods lendo as definições locais no `etcd`, sem fazer uma única chamada sequer à API da AWS no momento da inicialização. Eliminamos o gargalo de inicialização, zeramos os problemas de rate limit e garantimos estabilidade total para a nossa conta de nuvem mesmo nos maiores picos de estresse.
 
 
 
