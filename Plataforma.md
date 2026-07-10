@@ -91,7 +91,7 @@ Agora, o fluxo funciona de forma assíncrona e inteligente:
 
 **O impacto prático disso na nossa resiliência foi brutal.** Como os segredos ficam salvos localmente no cluster em um `Secret` do Kubernetes, o escalonamento das aplicações passou a ser instantâneo. 
 
-Essa mudança se provou ainda mais crucial no Kubernetes do que no ECS: os Pods no EKS são infinitamente mais voláteis*. Eles nascem, morrem, são realocados entre nós e escalados para cima e para baixo constantemente. Se tivéssemos mantido o modelo antigo de buscar os dados diretamente na AWS em cada inicialização, a volatilidade do Kubernetes teria gerado uma tempestade perfeita de requisições, estourando o rate limit do Parameter Store em minutos. 
+Essa mudança se provou ainda mais crucial no Kubernetes do que no ECS: os Pods no EKS são infinitamente mais voláteis. Eles nascem, morrem, são realocados entre nós e escalados para cima e para baixo constantemente. Se tivéssemos mantido o modelo antigo de buscar os dados diretamente na AWS em cada inicialização, a volatilidade do Kubernetes teria gerado uma tempestade perfeita de requisições, estourando o rate limit do Parameter Store em minutos. 
 
 Com o cache local provido pelo ESO, se precisarmos escalar de 10 para 100 réplicas em segundos, o Kubernetes apenas replica os Pods lendo as definições locais no `etcd`, sem fazer uma única chamada sequer à API da AWS no momento do boot. Eliminamos o gargalo de inicialização, zeramos os problemas de rate limit e garantimos estabilidade total para a nossa conta de nuvem mesmo nos maiores picos de estresse.
 
